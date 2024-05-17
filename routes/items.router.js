@@ -21,22 +21,27 @@ router.post('/items', async (req, res) => {
 });
 
 router.put('/items/:itemCode', async (req, res) => {
-  const itemCode = parseInt(req.params.itemCode, 10);
-  const { itemName, itemStat } = req.body;
+  try {
+    const itemCode = parseInt(req.params.itemCode, 10);
+    const { itemName, itemStat } = req.body;
 
-  const updatedItem = await Item.findOneAndUpdate(
-    { itemCode },
-    { itemName, itemStat },
-    { new: true }
-  );
+    const updatedItem = await Item.findOneAndUpdate(
+      { itemCode },
+      { itemName, itemStat },
+      { new: true }
+    );
 
-  if (!updatedItem) {
-    return res
-      .status(400)
-      .json({ message: `Item with Code ${itemCode} not found` });
+    if (!updatedItem) {
+      return res
+        .status(400)
+        .json({ message: `Item with Code ${itemCode} not found` });
+    }
+
+    res.status(200).json(updatedItem);
+  } catch (error) {
+    console.error('Error retrieving items', error);
+    res.status(500).json({ message: 'Error retrieving items from database' });
   }
-
-  res.status(200).json(updatedItem);
 });
 
 router.get('/items', async (req, res) => {

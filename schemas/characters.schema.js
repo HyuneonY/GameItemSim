@@ -17,6 +17,12 @@ const CharacterSchema = new mongoose.Schema({
     type: Number,
     default: 100,
   },
+  equippedItems: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item',
+  },
+]
 });
 
 export default mongoose.model('Character', CharacterSchema);
